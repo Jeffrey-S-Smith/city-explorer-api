@@ -42,15 +42,18 @@ app.get('/', (request, response) => {
 });
 
 
-app.get('/weather', (request, response) => {
-  let lat = request.query.lat;
-  let lon = request.query.lon;
-  let cityQuery = request.query.searchQuery;
-  let weatherObj = data.find(weather => cityQuery === weather.city_name);
-  let selectWeatherObj = new Forecast(weatherObj);
-  response.send(selectWeatherObj);
-  // response.send(`weather`);
-
+app.get('/weather', (request, response, next) => {
+  try {
+    // let lat = request.query.lat;
+    // let lon = request.query.lon;
+    let cityQuery = request.query.city_name;
+    let weatherObj = data.find(weather => cityQuery === weather.city_name);
+    let selectWeatherObj = weatherObj.data.map(day => new Forecast(day));
+    response.send(selectWeatherObj);
+    // response.send(`weather`);
+  } catch (err) {
+    next(err);
+  }
 });
 
 
@@ -67,26 +70,28 @@ app.get('*', (request, response) => {
 // Not Found
 
 // error handling middleware must be the last app.use()
-app.use((error, request, response, next) => {
+app.use((error, request, response) => {
   console.error(error);
   response.status(400).send(error.message);
 });
 
-app.use((error, request, response, next) => {
+app.use((error, request, response, ) => {
   console.error(error);
   response.status(404).send(error.message);
 });
 
-app.use((error, request, response, next) => {
+app.use((error, request, response) => {
   console.error(error);
   response.status(500).send(error.message);
 });
 
 //class
 class Forecast {
-  constructor(weatherObj) {
-    this.date = weatherObj.date;
-    this.description = weatherObj.description;
+  constructor(day) {
+    this.description = day.weather.description;
+    this.date = day.datetime;
+    this.max_temp = day.max_temp;
+    this.low_temp = day.low_temp;
 
   }
 }
@@ -95,3 +100,35 @@ class Forecast {
 // Listen is express method. It takes in a Port value and callback function
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
 
+/*
+lab 08 back end
+create GitHub
+image-finder-back-end like 201
+
+server.js
+.env .env.sample
+npm init -y
+npm cors axios dotenv express
+
+//require
+require('dotenv").config();
+const express =require('express');
+const cors =require('cors');
+const axios =require('axios');
+
+//use
+const app =express();
+app.use(cor())
+
+const PORT = process.env.PORT || 3002;
+app.get('?', (req,res) => {
+  res.status.
+})
+
+app.use((err,req, res, next)=>{
+  console.log(err.message);
+  res.(500).send(err.message);
+})
+.env PORT=3001
+
+*/
