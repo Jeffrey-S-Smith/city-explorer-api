@@ -28,8 +28,8 @@ Name of feature: Weather (placeholder): As a user of City Explorer, I want to se
 
 Estimate of time needed to complete: 3 hr
 
-Start time: 4:30 pm
+Start time: 8/23/ 2022 4:30 pm
 
-Finish time: -
+Finish time: -8/24/2022 4:00 pm
 
-Actual time needed to complete: _____
+Actual time needed to complete: do not know.
