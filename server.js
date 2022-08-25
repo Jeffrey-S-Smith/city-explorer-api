@@ -60,7 +60,7 @@ app.get('/weather', (request, response, next) => {
 
 // catch all "star" route
 app.get('*', (request, response) => {
-  response.send('Route does not exists. These are not the droids you\'re looking for.');
+  response.send('Internal Server Error.');
 });
 
 // ERRORS
@@ -75,7 +75,7 @@ app.use((error, request, response) => {
   response.status(400).send(error.message);
 });
 
-app.use((error, request, response, ) => {
+app.use((error, request, response) => {
   console.error(error);
   response.status(404).send(error.message);
 });
