@@ -18,6 +18,8 @@ let data = require('./data/weather.json');
 
 let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_API_KEY}&units=I&lat=${lat}&lon=${lon}&start_date=${currentDate}&end_date=${endDate}`;
 
+let weatherResults = await axios.get(url);
+
 // USE
 // Once we have required something, we have to use it. This were will will assign the required file a variable. React does this in one step, express takes 2: require and use. This is just Express is.
 
