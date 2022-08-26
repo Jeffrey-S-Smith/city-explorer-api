@@ -37,31 +37,48 @@ const PORT = process.env.PORT || 3002;
 // the first parameter is a URL in quotes
 
 app.get('/', (request, response) => {
-  response.send('Hello from our server!');
+  response.send('Hello from our server!'); 
 });
 
-app.get('/weather', async (request, response, next) => {
+app.get('/movie', async (request, response, next) => {
 
   try {
-    let lat = request.query.lat;
-    let lon = request.query.lon;
-    let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_KEY}&units=I&lat=${lat}&lon=${lon}`;
-
-    let apiResponse = await axios.get(url);
-
+    let city = request.query;
     
-    let weatherData = apiResponse.data;
+    
+    let url = `https://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_KEY}&query=${city}`;
    
-    let  selectWeatherObj = weatherData.data.map(day => new Forecast(day));
+    let apiResponse = await axios.get(url);
+    console.log(apiResponse);
+    let movieData = apiResponse.data;
     
-    response.send(selectWeatherObj);
-
+    let  selectMovieObj = movieData.data.results.map(movie => new Movie(movie));
+    response.send(selectMovieObj);
    
   } catch (err) {
     next(err);
   }
 });
 
+
+app.get('/weather', async (request, response, next) => {
+
+  try {
+    let lat = request.query.lat;
+    let lon = request.query.lon;
+    let url = `https://api.weatherbit.io/v2.0/forecast/daily?key=${process.env.WEATHER_KEY}&units=I&lat=${lat}&lon=${lon}&days=5&unitsI`;
+
+    let apiResponse = await axios.get(url);
+ 
+    let weatherData = apiResponse.data;
+   
+    let  selectWeatherObj = weatherData.data.map(day => new Forecast(day));
+    response.send(selectWeatherObj);
+   
+  } catch (err) {
+    next(err);
+  }
+});
 
 
 // catch all "star" route
@@ -91,47 +108,17 @@ class Forecast {
 
   }
 }
+
+class Movie {
+  constructor(movie) {
+    this.title = movie.original_title;
+    this.overview = movie.overview;
+    this.imgPath = movie.poster_path ? 'https://image.tmdb.org/t/p/w500' + movie.poster_path : '';
+    this.id = movie.id;
+
+  }
+}
 // LISTEN
 // Start the server
 // Listen is express method. It takes in a Port value and callback function
 app.listen(PORT, () => console.log(`listening on ${PORT}`));
-
-/*
-lab 08 back end
-create GitHub
-image-finder-back-end like 201
-
-server.js
-.env .env.sample
-npm init -y
-npm cors axios dotenv express
-
-//require
-require('dotenv").config();
-const express =require('express');
-const cors =require('cors');
-const axios =require('axios');
-
-//use
-const app =express();
-app.use(cor())
-
-const PORT = process.env.PORT || 3002;
-app.get('?', (req,res) => {
-  res.status.
-})
-
-app.use((err,req, res, next)=>{
-  console.log(err.message);
-  res.(500).send(err.message);
-})
-.env PORT=3001
-
-lab9
-
-module.export=getPhotos;
-
-Promise.resolve().then(() =>{
-  throw new Error(err.message);
-}).catch(next);
-*/
