@@ -1,12 +1,23 @@
 const axios = require('axios');
+const cache = require('./cache.js');
 
 
 let getMovie = async (request, response, next) => {
- 
+  
 
   try {
     let city = request.query.city;
-   
+    
+    // let key = city + 'Data';
+
+    // let timeToCache = 1000 * 60 * 60 * 24 * 30;
+    // let cacheTest = 1000 * 20;
+
+    // if (cache[key] && Date.now() - cache[key].timestamp < timeToCache) {
+
+    //   console.log('It\'s in the cache!');
+    //   response.status(200).send(cache[key].data);
+    // } else {
    
     let url = `http://api.themoviedb.org/3/search/movie?api_key=${process.env.MOVIE_KEY}&query=${city}&include_adult=false`;
    
@@ -17,8 +28,12 @@ let getMovie = async (request, response, next) => {
     let  selectMovieObj = movieData.results.map(movie => new Movie(movie));
     response.send(selectMovieObj);
 
-  
-  
+  //   cache[key] = {
+  //     data: selectMovieObj,
+  //     timestamp: Date.now(),
+  //   }
+
+  // };
   } catch (err) {
     next(err);
   }

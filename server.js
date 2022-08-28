@@ -38,6 +38,9 @@ const PORT = process.env.PORT || 3002;
 // app.get correlates to axios.get
 // the first parameter is a URL in quotes
 
+
+
+
 app.get('/', (request, response) => {
   response.send('Hello from our server!'); 
 });
